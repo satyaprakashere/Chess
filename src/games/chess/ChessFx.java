@@ -64,48 +64,18 @@ public class ChessFx extends Application {
                 }
 
                 if(row == 1) {
-                    ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/wpawn.png")));
-                    if (node instanceof Pane){
-                        ((Pane)node).getChildren().add(img);
-                    }
-                }
-                else if(row == 6) {
                     ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/bpawn.png")));
                     if (node instanceof Pane){
                         ((Pane)node).getChildren().add(img);
                     }
                 }
+                else if(row == 6) {
+                    ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/wpawn.png")));
+                    if (node instanceof Pane){
+                        ((Pane)node).getChildren().add(img);
+                    }
+                }
                 else if (row == 0) {
-                    if (col == 0 || col== 7) {
-                        ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/wrook.png")));
-                        if (node instanceof Pane){
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    } else if (col == 1 || col == 6) {
-                        ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/wknight.png")));
-                        if (node instanceof Pane){
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    } else if (col == 2 || col == 5) {
-                        ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/wbishop.png")));
-                        if (node instanceof Pane){
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    }
-                    else if (col == 4) {
-                        ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/wking.png")));
-                        if (node instanceof Pane){
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    }
-                    else if (col == 3) {
-                        ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/wqueen.png")));
-                        if (node instanceof Pane){
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    }
-
-                } else if (row == 7) {
                     if (col == 0 || col== 7) {
                         ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/brook.png")));
                         if (node instanceof Pane){
@@ -130,6 +100,36 @@ public class ChessFx extends Application {
                     }
                     else if (col == 3) {
                         ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/bqueen.png")));
+                        if (node instanceof Pane){
+                            ((Pane)node).getChildren().add(img);
+                        }
+                    }
+
+                } else if (row == 7) {
+                    if (col == 0 || col== 7) {
+                        ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/wrook.png")));
+                        if (node instanceof Pane){
+                            ((Pane)node).getChildren().add(img);
+                        }
+                    } else if (col == 1 || col == 6) {
+                        ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/wknight.png")));
+                        if (node instanceof Pane){
+                            ((Pane)node).getChildren().add(img);
+                        }
+                    } else if (col == 2 || col == 5) {
+                        ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/wbishop.png")));
+                        if (node instanceof Pane){
+                            ((Pane)node).getChildren().add(img);
+                        }
+                    }
+                    else if (col == 4) {
+                        ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/wking.png")));
+                        if (node instanceof Pane){
+                            ((Pane)node).getChildren().add(img);
+                        }
+                    }
+                    else if (col == 3) {
+                        ImageView img = new ImageView(new Image(ChessFx.class.getResourceAsStream("view/images/wqueen.png")));
                         if (node instanceof Pane){
                             ((Pane)node).getChildren().add(img);
                         }

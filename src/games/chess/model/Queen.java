@@ -1,5 +1,6 @@
 package games.chess.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -12,23 +13,72 @@ class Queen extends Piece {
         super(position, player, board);
     }
 
-    private Queen(Pose2d position, Player player, ChessBoard board, List<Move> moves) {
-        super(position, player, board, moves);
-    }
-
     @Override
     public List<Move> getAllPossibleMoves() {
-        //TODO : check boundary conditions
-        int x = this.getCurrentPosition().getColumn();
-        int y = this.getCurrentPosition().getRow();
-        for (int i=-ChessBoard.COLS; i<=ChessBoard.COLS; ++i) {
-            for (int j=-ChessBoard.ROWS; j<=ChessBoard.ROWS; ++j) {
-                if(i==0 && j==0) {
-                    continue;
-                }
-                this.addMove(new Pose2d(y + j, x + i));
-            }
+        List<Move> allPossibleMoves = new ArrayList<>();
+
+        Pose2d pos = this.currentPosition;
+        int x = pos.getRow();
+        int y = pos.getColumn();
+
+        int i = 1;
+        pos = new Pose2d(x + i, y + i);
+        while (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
+            ++i;
+            allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            pos = new Pose2d(x + i, y + i);
         }
+        i = 1;
+        pos = new Pose2d(x + i, y - i);
+        while (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
+            ++i;
+            allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            pos = new Pose2d(x + i, y - i);
+        }
+        i = 1 ;
+        pos = new Pose2d(x - i, y - i);
+        while (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
+            ++i;
+            allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            pos = new Pose2d(x - i, y - i);
+        }
+        i = 1;
+        pos = new Pose2d(x - i, y + i);
+        while (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
+            ++i;
+            allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            pos = new Pose2d(x - i, y + i);
+        }
+
+        i = 1;
+        pos = new Pose2d(x + i, y);
+        while (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
+            ++i;
+            allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            pos = new Pose2d(x + i, y);
+        }
+        i = 1;
+        pos = new Pose2d(x - i, y);
+        while (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
+            ++i;
+            allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            pos = new Pose2d(x - i, y);
+        }
+        i = 1 ;
+        pos = new Pose2d(x, y - i);
+        while (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
+            ++i;
+            allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            pos = new Pose2d(x, y - i);
+        }
+        i = 1;
+        pos = new Pose2d(x, y + i);
+        while (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
+            ++i;
+            allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            pos = new Pose2d(x, y + i);
+        }
+
         return allPossibleMoves;
     }
 }

@@ -28,17 +28,7 @@ public class ChessBoardController {
     private boolean UI_LOADED = false;
     public ChessBoardController() {
     }
-//    @FXML
-//    protected void onClick(MouseEvent e) {
-//        System.out.println(e.getX());
-//        System.out.println(e.getSceneX());
-//
-//        for (Node view : pane01.getChildren()) {
-//            if (view instanceof ImageView){
-//                ((ImageView)view).setImage(new Image(ChessFx.class.getResourceAsStream("chess/view/images/bqueen.png")));
-//            }
-//        }
-//    }
+
     @FXML
     protected void onMouseClick(MouseEvent e) {
         if(UI_LOADED == false) {
@@ -57,8 +47,11 @@ public class ChessBoardController {
         int row = (int)(e.getY()/height*8);
         System.out.println(row + " : " + col);
         if(playing == false) {
-            List<Move> moves = chessBoard.getPiece(new Pose2d(row, col)).getAllPossibleMoves();
             currentPiece = chessBoard.getPiece(new Pose2d(row, col));
+            if (currentPiece.getPlayer() != currentPlayer) {
+                return;
+            }
+            List<Move> moves = currentPiece.getAllPossibleMoves();
             for(Move move : moves) {
                 Pane pane = board[move.getTargetPosition().getRow()][move.getTargetPosition().getColumn()];
                 Rectangle r = new Rectangle(0, 0, pane.getWidth(), pane.getHeight());
@@ -66,17 +59,34 @@ public class ChessBoardController {
                 r.setStroke(Color.RED);
                 r.setStrokeWidth(2);
                 pane.getChildren().add(r);
-                for (Node view : pane.getChildren()) {
-                    if (view instanceof ImageView) {
-                        ((ImageView) view).setImage(new Image(ChessFx.class.getResourceAsStream("view/images/bqueen.png")));
-                    }
-                }
             }
             playing = true;
         } else {
+
+            if (chessBoard.getPiece(new Pose2d(row, col)).getPlayer() != currentPlayer) {
+                return;
+            }
             Pane pane = board[row][col];
-            currentPiece.moveTo(new Pose2d(row, col));
-            playing = false;
+            if(currentPiece.isMovableTo(new Pose2d(row, col))) {
+                Pane oldPane = board[currentPiece.getCurrentPosition().getRow()][currentPiece.getCurrentPosition().getColumn()];
+                Image image = null;
+                for (Node view : oldPane.getChildren()) {
+                    if (view instanceof ImageView) {
+                        image = ((ImageView) view).getImage();
+                        ((ImageView) view).setImage(null);
+                    }
+                }
+                for (Node view : pane.getChildren()) {
+                    if (view instanceof ImageView) {
+                        ((ImageView) view).setImage(image);
+                    }
+                }
+                currentPiece.moveTo(new Pose2d(row, col));
+
+                playing = false;
+                currentPlayer = currentPlayer == Player.WHITE ? Player.BLACK : Player.WHITE;
+            }
+
         }
 
     }

@@ -1,5 +1,6 @@
 package games.chess.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -13,54 +14,48 @@ class Rook extends Piece {
         moved = false;
     }
 
-    private Rook(Pose2d position, Player player, ChessBoard board, List<Move> moves) {
-        super(position, player, board, moves);
-        moved = true;
-    }
-
     public boolean isMoved() {
         return moved;
     }
 
     @Override
     public List<Move> getAllPossibleMoves() {
-        getEastMoves();
-        getWestMoves();
-        getNorthMoves();
-        getSouthMoves();
+        List<Move> allPossibleMoves = new ArrayList<>();
+
+        Pose2d pos = this.currentPosition;
+        int x = pos.getRow();
+        int y = pos.getColumn();
+
+        int i = 1;
+        pos = new Pose2d(x + i, y);
+        while (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
+            ++i;
+            allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            pos = new Pose2d(x + i, y);
+        }
+        i = 1;
+        pos = new Pose2d(x - i, y);
+        while (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
+            ++i;
+            allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            pos = new Pose2d(x - i, y);
+        }
+        i = 1 ;
+        pos = new Pose2d(x, y - i);
+        while (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
+            ++i;
+            allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            pos = new Pose2d(x, y - i);
+        }
+        i = 1;
+        pos = new Pose2d(x, y + i);
+        while (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
+            ++i;
+            allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            pos = new Pose2d(x, y + i);
+        }
+
         return allPossibleMoves;
-    }
-
-    private void getWestMoves() {
-        final int j = this.getCurrentPosition().getRow();
-
-        for (int i=this.getCurrentPosition().getColumn(); i>=0; --i) {
-            this.addMove(new Pose2d(j,i));
-        }
-    }
-
-    private void getEastMoves() {
-        final int j = this.getCurrentPosition().getRow();
-
-        for (int i=this.getCurrentPosition().getColumn(); i<ChessBoard.COLS; ++i) {
-            this.addMove(new Pose2d(j,i));
-        }
-    }
-
-    private void getNorthMoves() {
-        final int i = this.getCurrentPosition().getColumn();
-
-        for (int j=this.getCurrentPosition().getRow(); j<ChessBoard.ROWS; ++j) {
-            this.addMove(new Pose2d(j,i));
-        }
-    }
-
-    private void getSouthMoves() {
-        final int i = this.getCurrentPosition().getColumn();
-
-        for (int j=this.getCurrentPosition().getRow(); j>=0; --j) {
-            this.addMove(new Pose2d(j,i));
-        }
     }
 }
 

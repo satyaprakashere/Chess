@@ -10,18 +10,15 @@ public class Pawn extends Piece {
         super(position, player, board);
     }
 
-    private Pawn(Pose2d position, Player player, ChessBoard board, List<Move> moves) {
-        super(position, player, board, moves);
-    }
-
-
     @Override
     public List<Move> getAllPossibleMoves() {
+        List<Move> allPossibleMoves = new ArrayList<>();
+
         Move move = new Move(this.currentPosition, new Pose2d(this.currentPosition.getRow() + (this.player.getRow() == 0 ? 1 : -1), this.currentPosition.getColumn()), this, false);
 
         if (!this.board.isFree(move.getTargetPosition())) {
-            this.addMove(new Pose2d(move.getTargetPosition().getRow(), move.getTargetPosition().getColumn()+1));
-            this.addMove(new Pose2d(move.getTargetPosition().getRow(), move.getTargetPosition().getColumn()-1));
+            allPossibleMoves.add(new Move(this.currentPosition, new Pose2d(move.getTargetPosition().getRow(), move.getTargetPosition().getColumn() + 1), this, false));
+            allPossibleMoves.add(new Move(this.currentPosition, new Pose2d(move.getTargetPosition().getRow(), move.getTargetPosition().getColumn() + 1), this, false));
         } else {
             allPossibleMoves.add(move);
         }
