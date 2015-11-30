@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -46,15 +47,23 @@ public class ChessBoardController {
         int col = (int)(e.getX()/width*8);
         int row = (int)(e.getY()/height*8);
         System.out.println(row + " : " + col);
+
         if(playing == false) {
             currentPiece = chessBoard.getPiece(new Pose2d(row, col));
-            if (currentPiece.getPlayer() != currentPlayer) {
+            if (currentPiece == null || currentPiece.getPlayer() != currentPlayer) {
                 return;
             }
+            Pane pane = board[row][col];
+            Rectangle r = new Rectangle(0, 0, pane.getWidth(), pane.getHeight());
+            r.setFill(Color.TRANSPARENT);
+            r.setStroke(Color.GREEN);
+            r.setStrokeWidth(4);
+            pane.getChildren().add(r);
+
             List<Move> moves = currentPiece.getAllPossibleMoves();
             for(Move move : moves) {
-                Pane pane = board[move.getTargetPosition().getRow()][move.getTargetPosition().getColumn()];
-                Rectangle r = new Rectangle(0, 0, pane.getWidth(), pane.getHeight());
+                pane = board[move.getTargetPosition().getRow()][move.getTargetPosition().getColumn()];
+                r = new Rectangle(0, 0, pane.getWidth(), pane.getHeight());
                 r.setFill(Color.TRANSPARENT);
                 r.setStroke(Color.RED);
                 r.setStrokeWidth(2);
@@ -63,19 +72,39 @@ public class ChessBoardController {
             playing = true;
         } else {
 
-            if (chessBoard.getPiece(new Pose2d(row, col)).getPlayer() != currentPlayer) {
+            if (chessBoard.getPiece(new Pose2d(row, col)) != null && chessBoard.getPiece(new Pose2d(row, col)).getPlayer() == currentPlayer) {
                 return;
             }
             Pane pane = board[row][col];
             if(currentPiece.isMovableTo(new Pose2d(row, col))) {
                 Pane oldPane = board[currentPiece.getCurrentPosition().getRow()][currentPiece.getCurrentPosition().getColumn()];
                 Image image = null;
+                Rectangle r = null;
+
                 for (Node view : oldPane.getChildren()) {
                     if (view instanceof ImageView) {
                         image = ((ImageView) view).getImage();
                         ((ImageView) view).setImage(null);
                     }
+                    if (view instanceof Rectangle) {
+                        r = (Rectangle) view;
+                    }
                 }
+                oldPane.getChildren().removeAll(r);
+
+                List<Move> moves = currentPiece.getAllPossibleMoves();
+                for(Move move : moves) {
+                    Pane p = board[move.getTargetPosition().getRow()][move.getTargetPosition().getColumn()];
+                    for (Node rect : p.getChildren()) {
+                        if (rect instanceof Rectangle) {
+                            r = (Rectangle)rect;
+                        }
+                    }
+                    p.getChildren().removeAll(r);
+
+                }
+
+
                 for (Node view : pane.getChildren()) {
                     if (view instanceof ImageView) {
                         ((ImageView) view).setImage(image);
