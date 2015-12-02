@@ -1,4 +1,4 @@
-package games.chess;
+package game.chess;
 
 /**
  * Created by Satya on 13/06/14.
@@ -9,7 +9,7 @@ public class Main {
         if (!checkSystemRequirements()) {
             System.exit(-1);
         }
-        ChessFx.launch(args);
+//        ChessFx.launch(args);
     }
 
     public static boolean checkSystemRequirements() {

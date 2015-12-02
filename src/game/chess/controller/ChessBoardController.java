@@ -1,6 +1,5 @@
-package games.chess.controller;
+package game.chess.controller;
 
-import games.chess.model.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -10,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import game.chess.model.*;
 
 import java.util.Set;
 

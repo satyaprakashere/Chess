@@ -1,4 +1,4 @@
-package games.chess;
+package game.chess;
 
 import java.io.IOException;
 
@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -24,7 +23,6 @@ public class ChessFx extends Application {
 
         initRootLayout();
         showPersonOverview();
-
     }
 
     public void initRootLayout() {

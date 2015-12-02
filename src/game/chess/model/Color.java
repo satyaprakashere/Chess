@@ -1,4 +1,4 @@
-package games.chess.model;
+package game.chess.model;
 
 /**
  * Created by Satya on 01/12/15.

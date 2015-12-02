@@ -1,4 +1,4 @@
-package games.chess;
+package game.chess;
 
 /**
  * Created by Satya on 25/06/14.
