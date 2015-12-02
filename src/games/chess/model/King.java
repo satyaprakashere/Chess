@@ -1,7 +1,6 @@
 package games.chess.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -13,34 +12,37 @@ public class King extends Piece {
         super(position, player, board);
         moved = false;
     }
-
     @Override
-    public List<Move> getAllPossibleMoves() {
-        List<Move> allPossibleMoves = new ArrayList<>();
+    public Piece withPosition(Pose2d pos) {
+        return new King(pos, this.player, this.board);
+    }
+    @Override
+    public Set<Move> allPossibleMoves() {
+        Set<Move> allPossibleMoves = new HashSet<>(16);
 
-        int x = this.getCurrentPosition().getColumn();
-        int y = this.getCurrentPosition().getRow();
+        int x = this.position().col();
+        int y = this.position().row();
         for (int i=-1; i<=1; ++i) {
             for (int j=-1; j<=1; ++j) {
-                Pose2d pos = new Pose2d(y + j, x + i);
+                Pose2d pos = Pose2d.create(y + j, x + i);
                 if(i==0 && j==0) {
                     continue;
                 }
-                if (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
-                    allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+                if (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.position, pos))) {
+                    allPossibleMoves.add(new Move(this.position, pos, this, false));
                 }
             }
         }
         Pose2d pos = queenSideCastling();
         if (pos != null) {
-            if (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
-                allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            if (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.position, pos))) {
+                allPossibleMoves.add(new Move(this.position, pos, this, false));
             }
         }
         pos = kingSideCastling();
         if (pos != null) {
-            if (!this.board.isOutOfBounds(pos) && (this.board.isFree(pos) || this.board.containsEnemy(this.currentPosition, pos))) {
-                allPossibleMoves.add(new Move(this.currentPosition, pos, this, false));
+            if (this.isSafeToMove(pos)) {
+                allPossibleMoves.add(new Move(this.position, pos, this, false));
             }
         }
         return allPossibleMoves;
@@ -57,18 +59,18 @@ public class King extends Piece {
             return null;
         }
         for(int column = 4; column<7; column++){
-            Pose2d pos = new Pose2d(getCurrentPosition().getRow(),column);
-            if(!getBoard().isFree(pos)){
+            Pose2d pos = Pose2d.create(position().row(),column);
+            if(!this.board.isFree(pos)){
                 return null;
             }
         }
 
-        Pose2d queenSideTower = new Pose2d(getCurrentPosition().getRow(), 7);
-        if (getBoard().containsEnemy(getCurrentPosition(), queenSideTower)) {
+        Pose2d queenSideTower = Pose2d.create(position().row(), 7);
+        if (this.board.containsEnemy(position(), queenSideTower)) {
             return null;
         }
 
-        if (!getBoard().isUnmovedRook(queenSideTower)) {
+        if (!this.board.isUnmovedRook(queenSideTower)) {
             return null;
         }
         return queenSideTower;
@@ -79,16 +81,16 @@ public class King extends Piece {
             return null;
         }
         for(int column = 2; column > 0; column--){
-            Pose2d pos = new Pose2d(getCurrentPosition().getRow(),column);
-            if(!getBoard().isFree(pos)){
+            Pose2d pos = Pose2d.create(position().row(),column);
+            if(!this.board.isFree(pos)){
                 return null;
             }
         }
-        Pose2d kingSideTower = new Pose2d(getCurrentPosition().getRow(), 0);
-        if (getBoard().containsEnemy(getCurrentPosition(), kingSideTower)) {
+        Pose2d kingSideTower = Pose2d.create(position().row(), 0);
+        if (this.board.containsEnemy(position(), kingSideTower)) {
             return null;
         }
-        if (!getBoard().isUnmovedRook(kingSideTower)) {
+        if (!this.board.isUnmovedRook(kingSideTower)) {
             return null;
         }
         return kingSideTower;

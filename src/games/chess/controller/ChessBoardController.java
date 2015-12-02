@@ -1,6 +1,5 @@
 package games.chess.controller;
 
-import games.chess.ChessFx;
 import games.chess.model.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -12,8 +11,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -49,8 +46,8 @@ public class ChessBoardController {
         System.out.println(row + " : " + col);
 
         if(playing == false) {
-            currentPiece = chessBoard.getPiece(new Pose2d(row, col));
-            if (currentPiece == null || currentPiece.getPlayer() != currentPlayer) {
+            currentPiece = chessBoard.pieceAtPosition(Pose2d.create(row, col));
+            if (currentPiece == null || currentPiece.player() != currentPlayer) {
                 return;
             }
             Pane pane = board[row][col];
@@ -60,9 +57,12 @@ public class ChessBoardController {
             r.setStrokeWidth(4);
             pane.getChildren().add(r);
 
-            List<Move> moves = currentPiece.getAllPossibleMoves();
+            Set<Move> moves = currentPiece.allPossibleMoves();
+            if (moves == null) {
+                System.out.println("fdsfsd");
+            }
             for(Move move : moves) {
-                pane = board[move.getTargetPosition().getRow()][move.getTargetPosition().getColumn()];
+                pane = board[move.getTargetPosition().row()][move.getTargetPosition().col()];
                 r = new Rectangle(0, 0, pane.getWidth(), pane.getHeight());
                 r.setFill(Color.TRANSPARENT);
                 r.setStroke(Color.RED);
@@ -72,12 +72,12 @@ public class ChessBoardController {
             playing = true;
         } else {
 
-            if (chessBoard.getPiece(new Pose2d(row, col)) != null && chessBoard.getPiece(new Pose2d(row, col)).getPlayer() == currentPlayer) {
+            if (chessBoard.pieceAtPosition(Pose2d.create(row, col)) != null && chessBoard.pieceAtPosition(Pose2d.create(row, col)).player() == currentPlayer) {
                 return;
             }
             Pane pane = board[row][col];
-            if(currentPiece.isMovableTo(new Pose2d(row, col))) {
-                Pane oldPane = board[currentPiece.getCurrentPosition().getRow()][currentPiece.getCurrentPosition().getColumn()];
+            if(currentPiece.isMovableTo(Pose2d.create(row, col)) != null) {
+                Pane oldPane = board[currentPiece.position().row()][currentPiece.position().col()];
                 Image image = null;
                 Rectangle r = null;
 
@@ -92,9 +92,9 @@ public class ChessBoardController {
                 }
                 oldPane.getChildren().removeAll(r);
 
-                List<Move> moves = currentPiece.getAllPossibleMoves();
+                Set<Move> moves = currentPiece.allPossibleMoves();
                 for(Move move : moves) {
-                    Pane p = board[move.getTargetPosition().getRow()][move.getTargetPosition().getColumn()];
+                    Pane p = board[move.getTargetPosition().row()][move.getTargetPosition().col()];
                     for (Node rect : p.getChildren()) {
                         if (rect instanceof Rectangle) {
                             r = (Rectangle)rect;
@@ -110,7 +110,7 @@ public class ChessBoardController {
                         ((ImageView) view).setImage(image);
                     }
                 }
-                currentPiece.moveTo(new Pose2d(row, col));
+                chessBoard.movePiece(currentPiece, Pose2d.create(row, col));
 
                 playing = false;
                 currentPlayer = currentPlayer == Player.WHITE ? Player.BLACK : Player.WHITE;

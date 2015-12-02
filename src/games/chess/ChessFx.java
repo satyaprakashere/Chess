@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -28,11 +29,9 @@ public class ChessFx extends Application {
 
     public void initRootLayout() {
         try {
-            // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ChessFx.class.getResource("view/javafx/ChessFx.fxml"));
             rootLayout = loader.load();
-            // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -46,6 +45,7 @@ public class ChessFx extends Application {
             FXMLLoader loader1 = new FXMLLoader();
             loader1.setLocation(ChessFx.class.getResource("view/javafx/ChessBoard.fxml"));
             GridPane chessBoard = loader1.load();
+            chessBoard.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
             for (Node node : chessBoard.getChildren()) {
                 Integer x = GridPane.getRowIndex(node);
@@ -144,15 +144,12 @@ public class ChessFx extends Application {
 
             }
 
-            // Set person overview into the center of root layout.
             rootLayout.setCenter(chessBoard);
-//            rootLayout.setCenter(personOverview);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     public static void main(String[] args) {
-        System.out.print("Haha");
         ChessFx.launch(args);
     }
 }

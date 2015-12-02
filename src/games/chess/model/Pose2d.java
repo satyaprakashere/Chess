@@ -5,19 +5,19 @@ package games.chess.model;
  */
 public class Pose2d implements Position {
     private final int row;
-    private final int column;
+    private final int col;
 
-    public Pose2d(int row, int column) {
+    private Pose2d(int row, int col) {
         this.row = row;
-        this.column = column;
+        this.col = col;
     }
 
-    public int getRow() {
+    public int row() {
         return row;
     }
 
-    public int getColumn() {
-        return column;
+    public int col() {
+        return col;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class Pose2d implements Position {
 
         Pose2d position = (Pose2d) that;
 
-        if (this.column != position.column) return false;
+        if (this.col != position.col) return false;
         if (this.row != position.row) return false;
 
         return true;
@@ -36,7 +36,10 @@ public class Pose2d implements Position {
     @Override
     public int hashCode() {
         int result = row;
-        result = 31 * result + column;
+        result = 31 * result + col;
         return result;
+    }
+    public static Pose2d create(final int row, final int col) {
+        return new Pose2d(row, col);
     }
 }

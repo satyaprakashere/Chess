@@ -1,57 +1,56 @@
 package games.chess.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Created by Satya on 14/06/14.
  */
 
-// TODO : create static factory method for all pieces :D
+// TODO : withPosition static factory method for all pieces :D
 public abstract class Piece implements Movable<Piece> {
-    //TODO : create a static function for calculating all possible moves
-    protected Pose2d currentPosition;
+    //TODO : withPosition a static function for calculating all possible moves
+    protected final Pose2d position;
     protected final Player player;
     //TODO : Do we need that ???
     protected final ChessBoard board;
+//    protected Set<Move> allPossibleMoves;
 
     public Piece(final Pose2d position, final Player player, final ChessBoard board) {
-        this.currentPosition = position;
+        this.position = position;
         this.player = player;
         this.board = board;
+//        this.allPossibleMoves = new HashSet<>();
     }
 
-    public boolean isMovableTo(Pose2d position) {
-        if (this.board.isFree(position) || this.board.containsEnemy(currentPosition, position)) {
-            for (Move move : this.getAllPossibleMoves()) {
-                if (move.getTargetPosition().equals(position)) {
-                    return true;
-                }
-            }
+    public Move isMovableTo(Pose2d pos) {
+        if (this.isSafeToMove(pos) && this.allPossibleMoves().contains(new Move(this.position, pos, this, false))) {
+            return new Move(this.position, pos, this, false);
         }
-        return false;
+        return null;
+    }
+    public boolean isSafeToMove(Pose2d pos) {
+        return this.board.isFree(pos) || this.board.containsEnemy(this.position, pos);
     }
 
     public Piece moveTo(Pose2d position) {
-        this.board.setPiece(position, this);
-        this.board.setPiece(this.currentPosition, null);
-        this.currentPosition = position;
+//        if (this.isMovableTo(position)) {
+//            this.board.setPiece(position, this);
+//            this.board.setPiece(this.position, null);
+//            this.position = position;
+//        }
         return this;
     }
 
-    public final Pose2d getCurrentPosition() {
-        return currentPosition;
+    public Pose2d position() {
+        return this.position;
     }
 
-    public final Player getPlayer() {
-        return player;
+    public Player player() {
+        return this.player;
     }
 
-    public final ChessBoard getBoard() {
-        return board;
-    }
+    public abstract Set<Move> allPossibleMoves();
 
-    public abstract List<Move> getAllPossibleMoves();
+    public abstract Piece withPosition(Pose2d pos);
 }
